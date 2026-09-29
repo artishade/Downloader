@@ -2,26 +2,28 @@
 
 A Manifest V3 Chrome extension that scans any website for media (images, videos, audio), shows a visual picker, and downloads the selected files in one click.
 
+**This repo root is itself the loadable extension** — `manifest.json` sits at the top level, so a GitHub "Download ZIP" works out of the box.
+
 ## Repo layout
 
 ```
 .
-├── extension/                        # The loadable Chrome extension
-│   ├── manifest.json                 # MV3 manifest (popup + service worker)
-│   ├── popup.html / popup.js / popup.css
-│   ├── background.js                 # Download handling (chrome.downloads)
-│   ├── icons/                        # Generated icons (16/48/128)
-│   └── universal-media-downloader.zip  # Ready-to-install package
+├── manifest.json                     # MV3 manifest (popup + service worker)
+├── popup.html / popup.js / popup.css # Extension popup UI
+├── background.js                     # Download handling (chrome.downloads)
+├── icons/                            # Generated icons (16/48/128)
+├── universal-media-downloader.zip    # Ready-to-install package (folder inside)
 ├── index.html                        # Landing page: download link + install guide
-└── build_extension.py                # Regenerates icons and re-zips the extension
+├── build_extension.py                # Regenerates icons and re-zips the extension
+└── e2e/                              # Playwright end-to-end test
 ```
 
 ## Install (Chrome, Edge, Brave, Opera)
 
-1. Unzip `extension/universal-media-downloader.zip` — it contains a single `universal-media-downloader/` folder.
+1. Download this repo via GitHub's **Code → Download ZIP** (or grab `universal-media-downloader.zip` from the landing page) and extract it.
 2. Open `chrome://extensions` in the address bar.
 3. Turn on **Developer mode** (top-right toggle).
-4. Click **Load unpacked** and select the `universal-media-downloader` folder — the one that **directly contains** `manifest.json` (not its parent, and not the `.zip` itself, or Chrome will report "Manifest file is missing or unreadable").
+4. Click **Load unpacked** and select the extracted folder — the one that **directly contains** `manifest.json` (not a parent folder, and not the `.zip` itself, or Chrome will report "Manifest file is missing or unreadable").
 5. (Optional) Pin the icon via the puzzle-piece menu for quick access.
 
 ## Use it

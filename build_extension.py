@@ -15,7 +15,7 @@ import tempfile
 import zlib
 
 SIZES = [16, 48, 128]
-OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extension", "icons")
+OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons")
 
 # Brand colors
 FILL = (47, 129, 247)      # #2F81F7 blue
@@ -101,26 +101,37 @@ def main():
         write_png(os.path.join(OUT_DIR, f"icon{s}.png"), s, render(s))
         print(f"icon{s}.png written")
 
-    # Package the extension with a single top-level folder
-    # (universal-media-downloader/) so extracting always yields exactly the
-    # folder Chrome's "Load unpacked" expects - the one that directly
-    # contains manifest.json. This prevents the "Manifest file is missing or
-    # unreadable" error caused by selecting a parent or nested folder.
+    # Package the extension. The repo root IS the extension (so GitHub's
+    # "Download ZIP" -> extract -> load unpacked works out of the box), but
+    # the distributed ZIP gets a single universal-media-downloader/ top-level
+    # folder so extraction always yields exactly the folder Chrome expects.
     root = os.path.dirname(os.path.abspath(__file__))
-    ext = os.path.join(root, "extension")
-    zip_path = os.path.join(ext, "universal-media-downloader.zip")
+    zip_path = os.path.join(root, "universal-media-downloader.zip")
     if os.path.exists(zip_path):
         os.remove(zip_path)
+
+    files = [
+        "manifest.json",
+        "popup.html",
+        "popup.css",
+        "popup.js",
+        "background.js",
+        "icons/icon16.png",
+        "icons/icon48.png",
+        "icons/icon128.png",
+    ]
+    for f in files:
+        if not os.path.exists(os.path.join(root, f)):
+            raise SystemExit(f"missing required extension file: {f}")
 
     staging = tempfile.mkdtemp(prefix="umd-pkg-")
     try:
         pkg = os.path.join(staging, "universal-media-downloader")
-        shutil.copytree(
-            ext,
-            pkg,
-            ignore=shutil.ignore_patterns("*.zip"),
-        )
-        # Readable archive name inside Chrome's downloads list.
+        os.makedirs(pkg)
+        for f in files:
+            dst = os.path.join(pkg, f)
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            shutil.copy2(os.path.join(root, f), dst)
         subprocess.run(
             ["zip", "-r", "-X", zip_path, "universal-media-downloader"],
             cwd=staging,

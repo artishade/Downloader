@@ -21,7 +21,7 @@ const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 // Allow testing a different copy of the extension, e.g. an extracted ZIP:
 //   EXT_DIR=/tmp/extracted/universal-media-downloader node run-test.mjs
-const EXT_DIR = process.env.EXT_DIR || path.join(ROOT, "extension");
+const EXT_DIR = process.env.EXT_DIR || ROOT;
 const PAGE_DIR = path.join(__dirname, "test-page");
 const DL_DIR = path.join(__dirname, "downloads");
 const PORT = 8931;

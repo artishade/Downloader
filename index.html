@@ -119,14 +119,14 @@
           <span class="tag">Chrome Extension · Manifest V3</span>
           <span class="tag">One-Click Downloads</span>
         </div>
-        <img class="logo" src="extension/icons/icon128.png" alt="Universal Media Downloader logo" />
+        <img class="logo" src="icons/icon128.png" alt="Universal Media Downloader logo" />
         <h1>Download every media from <span>any website</span></h1>
         <p class="sub">
           Universal Media Downloader scans the page you're on, shows every image, video and audio file
           it can find, and lets you grab your selection in a single click.
         </p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="extension/universal-media-downloader.zip" download>
+          <a class="btn btn-primary" href="universal-media-downloader.zip" download>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l-3.3-3.3L7.3 11.7 12 16.4l4.7-4.7-1.4-1.4-3.3 3.3V3h-2ZM5 19h14v2H5z"/></svg>
             Download Extension (.zip)
           </a>
@@ -164,31 +164,31 @@
         <ol class="steps">
           <li>
             <div>
-              <b>Unzip the download</b>
-              <p>Extract <code>universal-media-downloader.zip</code> anywhere you like. You'll get a folder named <code>universal-media-downloader</code> that directly contains <code>manifest.json</code> plus the rest of the extension files.</p>
+              <b>Get the extension folder</b>
+              <p>Either download <code>universal-media-downloader.zip</code> with the button above, or grab the repo itself via GitHub's green <b>Code → Download ZIP</b> button — both contain the extension at their root.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <b>Extract it</b>
+              <p>Unzip anywhere. You should see <code>manifest.json</code>, <code>popup.html</code>, <code>popup.js</code>, <code>background.js</code> and an <code>icons</code> folder right at the top level.</p>
             </div>
           </li>
           <li>
             <div>
               <b>Open the Chrome extensions page</b>
-              <p>Type <span class="kbd">chrome://extensions</span> in the address bar and press Enter (works in Chrome, Edge, Brave, Opera and other Chromium browsers).</p>
-            </div>
-          </li>
-          <li>
-            <div>
-              <b>Enable Developer mode</b>
-              <p>Flip the <b>Developer mode</b> toggle in the top-right corner of that page.</p>
+              <p>Type <span class="kbd">chrome://extensions</span> in the address bar and press Enter (works in Chrome, Edge, Brave and other Chromium browsers), then flip on <b>Developer mode</b> (top-right).</p>
             </div>
           </li>
           <li>
             <div>
               <b>Load the extension</b>
-              <p>Click <b>Load unpacked</b> and select the <code>universal-media-downloader</code> folder — the one that <em>directly contains</em> <code>manifest.json</code>. Pin the icon from the puzzle-piece menu, open any site, click the icon, select media and hit <b>Download</b>.</p>
+              <p>Click <b>Load unpacked</b> and select the folder that <em>directly contains</em> <code>manifest.json</code>. Pin the icon from the puzzle-piece menu, open any site, click the icon, select media and hit <b>Download</b>.</p>
             </div>
           </li>
         </ol>
         <div class="callout" style="background: rgba(248, 81, 73, 0.08); border-color: rgba(248, 81, 73, 0.35);">
-          <b style="color: var(--bad)">Seeing "Manifest file is missing or unreadable"?</b> That means the wrong folder was selected (or the ZIP itself was). In <b>Load unpacked</b>, pick the extracted <code>universal-media-downloader</code> folder — the one with <code>manifest.json</code> directly inside it, not its parent folder and not the <code>.zip</code> file.
+          <b style="color: var(--bad)">Seeing "Manifest file is missing or unreadable"?</b> You selected a folder that doesn't have <code>manifest.json</code> directly inside it (for example the repo root after extracting into a subfolder, or the <code>.zip</code> itself). In <b>Load unpacked</b>, pick the folder where <code>manifest.json</code> sits at the top level.
         </div>
         <div class="callout">
           <b>Tip:</b> scroll the page fully <em>before</em> opening the extension — many sites lazy-load their images and videos as you scroll, so scrolling first lets the scanner see everything.
@@ -197,7 +197,7 @@
 
       <footer>
         Universal Media Downloader · for personal use — respect each website's terms and copyright. ·
-        <a href="extension/universal-media-downloader.zip" download>Download the ZIP</a>
+        <a href="universal-media-downloader.zip" download>Download the ZIP</a>
       </footer>
     </div>
   </body>

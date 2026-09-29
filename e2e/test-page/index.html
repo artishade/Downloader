@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Media Test Page — Universal Media Downloader E2E</title>
+    <style>
+      body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 900px; }
+      img, video, audio { max-width: 100%; display: block; }
+      .bg-hero { height: 160px; border-radius: 10px; margin-bottom: 20px;
+        background-image: url("bg-art.png"); background-size: cover; }
+    </style>
+  </head>
+  <body>
+    <h1>Media Test Page</h1>
+
+    <div class="bg-hero">CSS background art below</div>
+
+    <div class="grid">
+      <img src="red.png" width="220" height="140" alt="red" />
+      <img src="green.png" width="220" height="140" alt="green" />
+      <img src="blue.png" width="220" height="140" alt="blue" />
+      <img src="lazy1.png" data-src="lazy1.png" width="220" height="140" alt="lazy1" />
+      <img src="lazy2.png" data-src="lazy2.png" width="220" height="140" alt="lazy2" />
+    </div>
+
+    <video controls width="420" poster="video-poster.png">
+      <source src="clip.webm" type="video/webm" />
+    </video>
+
+    <audio controls src="tone.wav"></audio>
+
+    <a href="clip.webm">Direct video link</a>
+    <a href="tone.wav">Direct audio link</a>
+  </body>
+</html>

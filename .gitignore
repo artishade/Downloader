@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Universal Media Downloader: dependencies + e2e runtime artifacts
+node_modules/
+e2e/.profile/
+e2e/.frames/
+e2e/downloads/
+e2e/test-page/clip.webm
+e2e/test-page/tone.wav

@@ -8,8 +8,10 @@ into extension/universal-media-downloader.zip.
 
 import math
 import os
+import shutil
 import struct
 import subprocess
+import tempfile
 import zlib
 
 SIZES = [16, 48, 128]
@@ -99,18 +101,35 @@ def main():
         write_png(os.path.join(OUT_DIR, f"icon{s}.png"), s, render(s))
         print(f"icon{s}.png written")
 
-    # Package the extension
+    # Package the extension with a single top-level folder
+    # (universal-media-downloader/) so extracting always yields exactly the
+    # folder Chrome's "Load unpacked" expects - the one that directly
+    # contains manifest.json. This prevents the "Manifest file is missing or
+    # unreadable" error caused by selecting a parent or nested folder.
     root = os.path.dirname(os.path.abspath(__file__))
     ext = os.path.join(root, "extension")
     zip_path = os.path.join(ext, "universal-media-downloader.zip")
     if os.path.exists(zip_path):
         os.remove(zip_path)
-    subprocess.run(
-        ["zip", "-r", os.path.basename(zip_path), ".", "-x", "*.zip"],
-        cwd=ext,
-        check=True,
-    )
-    print(f"packaged: {zip_path}")
+
+    staging = tempfile.mkdtemp(prefix="umd-pkg-")
+    try:
+        pkg = os.path.join(staging, "universal-media-downloader")
+        shutil.copytree(
+            ext,
+            pkg,
+            ignore=shutil.ignore_patterns("*.zip"),
+        )
+        # Readable archive name inside Chrome's downloads list.
+        subprocess.run(
+            ["zip", "-r", "-X", zip_path, "universal-media-downloader"],
+            cwd=staging,
+            check=True,
+            stdout=subprocess.DEVNULL,
+        )
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+    print(f"packaged: {zip_path} (contains universal-media-downloader/ at root)")
 
 
 if __name__ == "__main__":

@@ -19,7 +19,9 @@ import url from "node:url";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const EXT_DIR = path.join(ROOT, "extension");
+// Allow testing a different copy of the extension, e.g. an extracted ZIP:
+//   EXT_DIR=/tmp/extracted/universal-media-downloader node run-test.mjs
+const EXT_DIR = process.env.EXT_DIR || path.join(ROOT, "extension");
 const PAGE_DIR = path.join(__dirname, "test-page");
 const DL_DIR = path.join(__dirname, "downloads");
 const PORT = 8931;
@@ -166,7 +168,7 @@ async function launchBrowser() {
   const userDataDir = path.join(__dirname, ".profile");
   fs.rmSync(userDataDir, { recursive: true, force: true });
 
-  log("launching Chromium with extension loaded");
+  log(`launching Chromium with extension loaded from: ${EXT_DIR}`);
   context = await chromium.launchPersistentContext(userDataDir, {
     headless: true,
     channel: "chromium",

@@ -20,6 +20,7 @@
         --accent: #58a6ff;
         --accent-2: #2f81f7;
         --ok: #3fb950;
+        --bad: #f85149;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html { scroll-behavior: smooth; }
@@ -164,7 +165,7 @@
           <li>
             <div>
               <b>Unzip the download</b>
-              <p>Extract <code>universal-media-downloader.zip</code> anywhere you like — you'll get a folder with the extension files.</p>
+              <p>Extract <code>universal-media-downloader.zip</code> anywhere you like. You'll get a folder named <code>universal-media-downloader</code> that directly contains <code>manifest.json</code> plus the rest of the extension files.</p>
             </div>
           </li>
           <li>
@@ -182,10 +183,13 @@
           <li>
             <div>
               <b>Load the extension</b>
-              <p>Click <b>Load unpacked</b> and select the extracted folder. Pin the icon from the puzzle-piece menu — now open any site, click the icon, select media and hit <b>Download</b>.</p>
+              <p>Click <b>Load unpacked</b> and select the <code>universal-media-downloader</code> folder — the one that <em>directly contains</em> <code>manifest.json</code>. Pin the icon from the puzzle-piece menu, open any site, click the icon, select media and hit <b>Download</b>.</p>
             </div>
           </li>
         </ol>
+        <div class="callout" style="background: rgba(248, 81, 73, 0.08); border-color: rgba(248, 81, 73, 0.35);">
+          <b style="color: var(--bad)">Seeing "Manifest file is missing or unreadable"?</b> That means the wrong folder was selected (or the ZIP itself was). In <b>Load unpacked</b>, pick the extracted <code>universal-media-downloader</code> folder — the one with <code>manifest.json</code> directly inside it, not its parent folder and not the <code>.zip</code> file.
+        </div>
         <div class="callout">
           <b>Tip:</b> scroll the page fully <em>before</em> opening the extension — many sites lazy-load their images and videos as you scroll, so scrolling first lets the scanner see everything.
         </div>

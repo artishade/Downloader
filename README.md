@@ -18,10 +18,10 @@ A Manifest V3 Chrome extension that scans any website for media (images, videos,
 
 ## Install (Chrome, Edge, Brave, Opera)
 
-1. Unzip `extension/universal-media-downloader.zip`.
+1. Unzip `extension/universal-media-downloader.zip` — it contains a single `universal-media-downloader/` folder.
 2. Open `chrome://extensions` in the address bar.
 3. Turn on **Developer mode** (top-right toggle).
-4. Click **Load unpacked** and choose the extracted folder.
+4. Click **Load unpacked** and select the `universal-media-downloader` folder — the one that **directly contains** `manifest.json` (not its parent, and not the `.zip` itself, or Chrome will report "Manifest file is missing or unreadable").
 5. (Optional) Pin the icon via the puzzle-piece menu for quick access.
 
 ## Use it

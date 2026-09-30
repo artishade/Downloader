@@ -1,23 +1,26 @@
-[e2e 01 | +0.1s] static server on http://127.0.0.1:8931
-[e2e 02 | +0.1s] launching Chromium with extension loaded from: /tmp/gh-zip/x/Downloader-main
-[e2e 03 | +0.7s] extension service worker up: chrome-extension://kdmonpiliniaaiamngilkcffeibccijk/background.js
+[e2e 01 | +0.0s] static server on http://127.0.0.1:8931
+[e2e 02 | +0.1s] launching Chromium with extension loaded from: /home/daytona/codebase
+[e2e 03 | +0.7s] extension service worker up: chrome-extension://pnpapmninmfakkdgjpohmbhneednmdch/background.js
 [e2e 04 | +0.7s] download behavior set to 'allow' (keep suggested filenames)
-[e2e 05 | +2.0s] clip.webm recorded via Chromium MediaRecorder (real VP8 video)
+[e2e 05 | +2.1s] clip.webm recorded via Chromium MediaRecorder (real VP8 video)
 [e2e 06 | +3.3s] sample page opened: http://127.0.0.1:8931/
-[e2e 07 | +4.0s] popup opened as a tab: chrome-extension://kdmonpiliniaaiamngilkcffeibccijk/popup.html
-[e2e 08 | +4.0s] popup state: {"info":"127.0.0.1","loadingHidden":true,"emptyHidden":true,"emptyH2":"No media found","cards":9}
-[e2e 09 | +4.0s] popup scanned the page: 9 media cards rendered
-[e2e 10 | +4.0s] scanner found: red, green, blue, lazy1, lazy2, clip, video-poster, tone, bg-art
-[e2e 11 | +4.1s] media types: image, video, audio
-[e2e 12 | +4.1s] clicked "Select all"
-[e2e 13 | +4.4s] selected 9 items
-[e2e 14 | +4.5s] clicked "Download"
-[e2e 15 | +4.6s] download progress: 9/9 downloaded, failures: (none)
-[e2e 16 | +6.1s] files on disk: bg-art.png, blue.png, clip.webm, green.png, lazy1.png, lazy2.png, red.png, tone.wav, video-poster.png
-[e2e 17 | +6.1s] content signatures verified (PNG/EBML/RIFF magic bytes correct)
-[e2e 18 | +6.1s] byte-identity verified: all 9 downloads match their source files exactly
-[e2e 19 | +6.1s] evidence: e2e/popup.png
-[e2e 20 | +6.8s] evidence: e2e/sample-page.png
+[e2e 07 | +3.6s] popup console.error: Failed to load resource: the server responded with a status of 403 (Forbidden)
+[e2e 08 | +4.0s] popup opened as a tab: chrome-extension://pnpapmninmfakkdgjpohmbhneednmdch/popup.html
+[e2e 09 | +4.1s] popup state: {"info":"127.0.0.1","loadingHidden":true,"emptyHidden":true,"emptyH2":"No media found","cards":10}
+[e2e 10 | +4.1s] popup scanned the page: 10 media cards rendered
+[e2e 11 | +4.1s] scanner found: red, green, blue, lazy1, lazy2, strict1, clip, video-poster, tone, bg-art
+[e2e 12 | +4.1s] media types: image, video, audio
+[e2e 13 | +4.1s] strict1 thumb state: {"srcPrefix":"data:image/png;base64,iVBORw0KGgoAAAANSU","recovered":"1","complete":true,"naturalWidth":200,"holderClass":"thumb"}
+[e2e 14 | +4.1s] thumbnail recovery: strict image recovered via service worker (data URL); broken thumbs: 0
+[e2e 15 | +4.1s] clicked "Select all"
+[e2e 16 | +4.4s] selected 10 items
+[e2e 17 | +4.5s] clicked "Download"
+[e2e 18 | +4.6s] download progress: 10/10 downloaded, failures: (none)
+[e2e 19 | +6.1s] files on disk: bg-art.png, blue.png, clip.webm, green.png, lazy1.png, lazy2.png, red.png, strict1.png, tone.wav, video-poster.png
+[e2e 20 | +6.1s] content signatures verified (PNG/EBML/RIFF magic bytes correct)
+[e2e 21 | +6.1s] byte-identity verified: all 9 downloads match their source files exactly
+[e2e 22 | +6.1s] evidence: e2e/popup.png
+[e2e 23 | +6.9s] evidence: e2e/sample-page.png
 
 [e2e PASS] extension installed, scanned media, selected, downloaded, verified on disk.
 

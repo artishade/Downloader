@@ -255,6 +255,76 @@ function baseName(url, type) {
   }
 }
 
+/* ---------------- Thumbnail loading ----------------
+ *
+ * Direct <img> loads can be blocked by the host (hotlink protection,
+ * Google apps, etc.). Pipeline per image:
+ *   1. plain <img src>,  2. SW fetch -> data URL,  3. placeholder icon.
+ * SW fetches run through a small concurrency-limited queue.
+ */
+
+const thumbQueue = [];
+let activeThumbFetches = 0;
+const MAX_THUMB_FETCHES = 4;
+
+function pumpThumbQueue() {
+  while (activeThumbFetches < MAX_THUMB_FETCHES && thumbQueue.length) {
+    const task = thumbQueue.shift();
+    activeThumbFetches++;
+    task().finally(() => {
+      activeThumbFetches--;
+      pumpThumbQueue();
+    });
+  }
+}
+
+function requestSwThumb(url, onOk, onFail) {
+  thumbQueue.push(async () => {
+    try {
+      const res = await chrome.runtime.sendMessage({ type: "thumb", url });
+      if (res && res.ok && res.dataUrl) onOk(res.dataUrl);
+      else onFail();
+    } catch {
+      onFail();
+    }
+  });
+  pumpThumbQueue();
+}
+
+function buildImageThumb(item) {
+  const holder = document.createElement("div");
+  holder.className = "thumb loading";
+  const img = document.createElement("img");
+  img.loading = "lazy";
+  img.referrerPolicy = "no-referrer";
+  img.alt = "";
+  img.onload = () => holder.classList.remove("loading");
+  img.onerror = () => {
+    if (img.dataset.recovered) {
+      // Even the service-worker copy failed — show the placeholder.
+      holder.classList.remove("loading");
+      holder.classList.add("broken");
+      holder.textContent = "🖼️";
+      return;
+    }
+    requestSwThumb(
+      item.url,
+      (dataUrl) => {
+        img.dataset.recovered = "1";
+        img.src = dataUrl;
+      },
+      () => {
+        holder.classList.remove("loading");
+        holder.classList.add("broken");
+        holder.textContent = "🖼️";
+      }
+    );
+  };
+  img.src = item.url;
+  holder.appendChild(img);
+  return holder;
+}
+
 /* ---------------- Rendering ---------------- */
 
 function visibleItems() {
@@ -276,22 +346,15 @@ function render() {
     card.className = "card" + (selected.has(item.id) ? " is-selected" : "");
     card.dataset.id = item.id;
 
-    const thumb = document.createElement(item.type === "image" ? "img" : "div");
+    let thumb;
     if (item.type === "image") {
-      thumb.className = "thumb";
-      thumb.loading = "lazy";
-      thumb.referrerPolicy = "no-referrer";
-      thumb.src = item.url;
-      thumb.onerror = () => {
-        const fb = document.createElement("div");
-        fb.className = "icon-thumb";
-        fb.textContent = "🖼️";
-        thumb.replaceWith(fb);
-      };
+      thumb = buildImageThumb(item);
     } else if (item.type === "video") {
+      thumb = document.createElement("div");
       thumb.className = "icon-thumb";
       thumb.textContent = "🎬";
     } else {
+      thumb = document.createElement("div");
       thumb.className = "icon-thumb";
       thumb.textContent = "🎵";
     }

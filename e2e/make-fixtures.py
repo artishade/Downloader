@@ -34,6 +34,7 @@ def main():
     make_png(f"{TEST_DIR}/test-page/lazy2.png", 200, 120, (142, 36, 170))
     make_png(f"{TEST_DIR}/test-page/bg-art.png", 400, 200, (55, 71, 79))
     make_png(f"{TEST_DIR}/test-page/video-poster.png", 320, 180, (69, 90, 100))
+    make_png(f"{TEST_DIR}/test-page/strict1.png", 200, 120, (0, 121, 107))
     print("png fixtures written")
 
 

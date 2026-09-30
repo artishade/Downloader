@@ -125,6 +125,16 @@ function startServer() {
       }
       const stat = fs.statSync(file);
       const mime = MIME[path.extname(file)] || "application/octet-stream";
+
+      // Hotlink protection simulation: strict1.png rejects direct <img> loads
+      // (the way Googleusercontent & co. do) but allows fetch() from the
+      // extension service worker.
+      if (p.endsWith("strict1.png") && req.headers["sec-fetch-dest"] === "image") {
+        res.writeHead(403, { "Content-Type": "text/plain" });
+        res.end("hotlinking blocked");
+        return;
+      }
+
       const range = req.headers.range;
       if (range) {
         const m = range.match(/bytes=(\d+)-(\d*)/);
@@ -291,6 +301,54 @@ async function main() {
   if (!names.includes("clip")) fail("scanner did not find the webm video");
   if (!names.includes("tone")) fail("scanner did not find the wav audio");
   if (!names.includes("bg-art")) fail("scanner did not find the CSS background image");
+  if (!names.includes("strict1")) fail("scanner did not find the hotlink-protected image");
+
+  // Thumbnail recovery: strict1.png blocks direct <img> loads (hotlink
+  // protection), so its popup thumbnail must be recovered through the
+  // service worker as a data URL.
+  let strictRecovered = false;
+  // Diagnostic: what state is the strict1 thumbnail in?
+  const thumbDiag = await popupPage.evaluate(() => {
+    const card = [...document.querySelectorAll("#grid .card")].find(
+      (c) => c.querySelector(".name")?.textContent === "strict1"
+    );
+    if (!card) return "card missing";
+    const img = card.querySelector(".thumb img");
+    if (!img) return "img missing";
+    return {
+      srcPrefix: img.src.slice(0, 40),
+      recovered: img.dataset.recovered || "0",
+      complete: img.complete,
+      naturalWidth: img.naturalWidth,
+      holderClass: img.parentElement?.className,
+    };
+  });
+  log(`strict1 thumb state: ${JSON.stringify(thumbDiag)}`);
+  try {
+    await popupPage.waitForFunction(
+      () => {
+        const card = [...document.querySelectorAll("#grid .card")].find(
+          (c) => c.querySelector(".name")?.textContent === "strict1"
+        );
+        if (!card) return false;
+        const img = card.querySelector(".thumb img");
+        return !!img && img.src.startsWith("data:image");
+      },
+      null,
+      { timeout: 10000 }
+    );
+    strictRecovered = true;
+  } catch {}
+  const brokenThumbs = await popupPage.evaluate(
+    () => document.querySelectorAll("#grid .thumb.broken").length
+  );
+  log(
+    `thumbnail recovery: strict image ${strictRecovered ? "recovered via service worker (data URL)" : "NOT recovered"}; broken thumbs: ${brokenThumbs}`
+  );
+  if (!strictRecovered) {
+    fail("service-worker thumbnail recovery failed for the hotlink-protected image");
+  }
+  if (brokenThumbs > 0) fail(`${brokenThumbs} thumbnails render as broken`);
 
   // Select all + download
   await popupPage.click("#selectAll");
@@ -327,7 +385,7 @@ async function main() {
 
   const expected = [
     "red.png", "green.png", "blue.png", "lazy1.png", "lazy2.png",
-    "bg-art.png", "video-poster.png", "clip.webm", "tone.wav",
+    "bg-art.png", "video-poster.png", "strict1.png", "clip.webm", "tone.wav",
   ].sort();
   const missing = expected.filter((f) => !got.includes(f));
   if (missing.length) fail(`missing downloads: ${missing.join(", ")}`);
